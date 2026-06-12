@@ -1,0 +1,52 @@
+# ==========================================
+# .gitignore untuk Proyek E-Resume (PHP/Web)
+# ==========================================
+
+# 1. Konfigurasi dan File Sensitif
+# ------------------------------------------
+# Jika nanti Anda menggunakan file .env untuk menyimpan password database
+.env
+.env.backup
+.env.production
+
+# (Opsional) Jika Anda ingin menyembunyikan file koneksi database Anda
+# Hapus tanda pagar (#) di bawah ini jika koneksi.php ingin diabaikan
+# koneksi.php 
+
+# 2. File Log & Error PHP
+# ------------------------------------------
+*.log
+error_log
+php_errors.log
+
+# 3. File Sistem Operasi (Mac & Windows)
+# ------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 4. Folder Konfigurasi Text Editor / IDE
+# ------------------------------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 5. File Database (Jika Anda meng-export DB ke folder proyek)
+# ------------------------------------------
+# Abaikan file dump database agar data pasien dummy tidak ikut ter-upload
+*.sql
+*.sqlite
+*.db
+
+# 6. Dependency / Package Manager (Opsional untuk masa depan)
+# ------------------------------------------
+# Jika nanti Anda memakai Composer (PHP) atau NPM (Node.js)
+vendor/
+node_modules/
