@@ -1,7 +1,13 @@
 <?php
+// --- Tambahkan 3 baris ini untuk memunculkan pesan error jika ada ---
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // simpan.php
 include 'koneksi.php';
 
+// Jika diakses melalui Form (POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Menangkap data dari form
@@ -28,13 +34,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_resume_baru = mysqli_insert_id($koneksi);
 
         // MENGALIHKAN (REDIRECT) KE HALAMAN CETAK
-        // Kita mengirimkan id_resume dan nama_pasien ke URL file cetak.php
         header("Location: /cetak/" . $id_resume_baru . "/" . urlencode($nama_pasien));
-        exit(); // Hentikan script setelah redirect
+        exit(); 
     } else {
+        // Jika gagal query, tampilkan alasannya
+        echo "<h3>Gagal menyimpan ke database!</h3>";
         echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
     }
     
     mysqli_close($koneksi);
+
+} else {
+    // INI YANG SEBELUMNYA TIDAK ADA:
+    // Jika diakses langsung atau kena redirect dari InfinityFree (?i=1)
+    echo "<div style='text-align:center; margin-top:50px; font-family:sans-serif;'>";
+    echo "<h2>Akses Ditolak atau Form Kosong!</h2>";
+    echo "<p>Sistem mendeteksi Anda mengakses halaman ini secara langsung tanpa mengirim data.</p>";
+    echo "<p>Jika Anda merasa sudah mengisi form, ini mungkin karena sistem keamanan hosting memblokirnya. Silakan kembali dan coba klik Simpan lagi.</p>";
+    echo "<a href='/form' style='padding: 10px 20px; background: #0d6efd; color: white; text-decoration: none; border-radius: 5px;'>Kembali ke Form</a>";
+    echo "</div>";
 }
 ?>
