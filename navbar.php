@@ -7,8 +7,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="input/form">Form Resume</a></li>
-                <li class="nav-item"><a class="nav-link" href="maps/maps">Peta Persebaran (Maps)</a></li>
+                <li class="nav-item"><a class="nav-link" href="/input/form">Form Resume</a></li>
+                <li class="nav-item"><a class="nav-link" href="/maps/maps">Peta Persebaran (Maps)</a></li>
             </ul>
         </div>
     </div>
