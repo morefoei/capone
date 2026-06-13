@@ -26,7 +26,7 @@
                         <li><a class="dropdown-item fw-bold text-primary" href="/form/pulang">Ringkasan Pulang</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/input/form">Form Resume</a></li>
+                ##<li class="nav-item"><a class="nav-link" href="/input/form">Form Resume</a></li>
                 <li class="nav-item"><a class="nav-link" href="/maps/maps">Peta Persebaran (Maps)</a></li>
             </ul>
         </div>
