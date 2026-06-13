@@ -14,6 +14,11 @@
 <div class="container mt-5 mb-5">
     <div class="card shadow">
         <div class="card-header bg-info text-white">
+                    <div class="d-flex justify-content-start w-100 mb-3">
+                <a href="javascript:history.back()" class="btn btn-warning">
+                    Kembali
+                </a>
+            </div>     
             <h4 class="mb-0">Rencana Pemulangan Pasien (Discharge Planning)</h4>
         </div>
         <div class="card-body">

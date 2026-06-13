@@ -14,6 +14,11 @@
 <div class="container mt-5 mb-5">
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-start w-100 mb-3">
+                <a href="javascript:history.back()" class="btn btn-warning">
+                    Kembali
+                </a>
+            </div>     
             <h4 class="mb-0">Ringkasan Pulang (Discharge Summary / E-Resume)</h4>
             <span class="badge bg-white text-primary fw-bold">No. Form: RI 02/2020/1</span>
         </div>
