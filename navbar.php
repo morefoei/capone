@@ -19,7 +19,7 @@
                         <li><a class="dropdown-item" href="/form/lab">Laboratorium</a></li>
                         <li><a class="dropdown-item" href="/form/radiologi">Radiologi</a></li>
                         <li><a class="dropdown-item" href="/form/tindakan">Tindakan</a></li>
-                        <li><a class="dropdown-item" href="/form/operaso">Operasi</a></li>
+                        <li><a class="dropdown-item" href="/form/operasi">Operasi</a></li>
                         <li><a class="dropdown-item" href="/form/resep">E-Resep</a></li>
                         <li><a class="dropdown-item" href="/form/planning">Discharge Planning</a></li>
                         <li><hr class="dropdown-divider"></li>
