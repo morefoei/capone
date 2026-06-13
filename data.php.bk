@@ -1,58 +1,44 @@
 <?php
-// Tampilkan error jika ada masalah
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Pastikan file koneksi database sudah benar
+include 'input/koneksi.php';
 
-// Sesuaikan path koneksi Anda. Jika file data.php ada di luar dan koneksi.php ada di dalam folder input:
-include 'input/koneksi.php'; 
+// ==========================================
+// 1. QUERY UNTUK GRAFIK & PENYAKIT TERBANYAK
+// ==========================================
+$query_grafik = "SELECT diagnosis_utama, COUNT(*) as jumlah 
+                 FROM resume_medis 
+                 WHERE diagnosis_utama IS NOT NULL AND diagnosis_utama != ''
+                 GROUP BY diagnosis_utama 
+                 ORDER BY jumlah DESC 
+                 LIMIT 5"; // Mengambil 5 penyakit terbanyak
+$result_grafik = mysqli_query($koneksi, $query_grafik);
 
-// Persiapkan variabel default
 $label_penyakit = [];
 $data_jumlah = [];
 $penyakit_terbanyak = "Belum Ada Data";
 $jumlah_terbanyak = 0;
-$result_tabel = null;
 
-try {
-    // ==========================================
-    // 1. QUERY GRAFIK (Menggunakan kolom diagnosis_utama)
-    // ==========================================
-    $query_grafik = "SELECT diagnosis_utama, COUNT(*) as jumlah 
-                     FROM resume_medis 
-                     WHERE diagnosis_utama IS NOT NULL AND diagnosis_utama != ''
-                     GROUP BY diagnosis_utama 
-                     ORDER BY jumlah DESC 
-                     LIMIT 5";
+$is_first = true;
+while ($row = mysqli_fetch_assoc($result_grafik)) {
+    $label_penyakit[] = $row['diagnosis_utama'];
+    $data_jumlah[] = $row['jumlah'];
     
-    $result_grafik = mysqli_query($koneksi, $query_grafik);
-    if (!$result_grafik) throw new Exception("Gagal query grafik: " . mysqli_error($koneksi));
-
-    $is_first = true;
-    while ($row = mysqli_fetch_assoc($result_grafik)) {
-        $label_penyakit[] = $row['diagnosis_utama'];
-        $data_jumlah[] = $row['jumlah'];
-        
-        if ($is_first) {
-            $penyakit_terbanyak = $row['diagnosis_utama'];
-            $jumlah_terbanyak = $row['jumlah'];
-            $is_first = false;
-        }
+    // Menangkap penyakit urutan ke-1 untuk ditampilkan di kartu atas
+    if ($is_first) {
+        $penyakit_terbanyak = $row['diagnosis_utama'];
+        $jumlah_terbanyak = $row['jumlah'];
+        $is_first = false;
     }
-
-    // ==========================================
-    // 2. QUERY TABEL (HANYA MEMANGGIL KOLOM YANG ADA DI GAMBAR)
-    // ==========================================
-    $query_tabel = "SELECT id_resume, no_rm, dpjp, diagnosis_utama, tgl_pulang 
-                    FROM resume_medis 
-                    ORDER BY id_resume DESC 
-                    LIMIT 50";
-                    
-    $result_tabel = mysqli_query($koneksi, $query_tabel);
-    if (!$result_tabel) throw new Exception("Gagal query tabel: " . mysqli_error($koneksi));
-
-} catch (Exception $e) {
-    die("<div style='margin:50px; font-family:sans-serif;'><h2 style='color:red;'>Error Database</h2><p>" . $e->getMessage() . "</p></div>");
 }
+
+// ==========================================
+// 2. QUERY UNTUK TABEL DAFTAR PASIEN
+// ==========================================
+$query_tabel = "SELECT no_rm, nama_pasien, jenis_kelamin, diagnosis_utama, tgl_pulang 
+                FROM resume_medis 
+                ORDER BY tgl_pulang DESC 
+                LIMIT 50"; // Menampilkan 50 pasien terakhir
+$result_tabel = mysqli_query($koneksi, $query_tabel);
 ?>
 
 <!DOCTYPE html>
@@ -67,10 +53,7 @@ try {
 </head>
 <body class="bg-light">
 
-<?php 
-// Panggil navbar (sesuaikan path-nya jika perlu, misal: include 'navbar.php';)
-if(file_exists('navbar.php')) include 'navbar.php'; 
-?>
+<?php include 'navbar.php'; ?>
 
 <div class="container mt-4 mb-5">
     
@@ -130,27 +113,27 @@ if(file_exists('navbar.php')) include 'navbar.php';
                             <thead class="table-dark sticky-top">
                                 <tr>
                                     <th>No</th>
-                                    <th>No. RM</th>
-                                    <th>DPJP</th>
+                                    <th>Nama Pasien</th>
+                                    <th>L/P</th>
                                     <th>Diagnosis (Penyakit)</th>
                                     <th>Tanggal Pulang</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                if ($result_tabel && mysqli_num_rows($result_tabel) > 0) {
+                                if (mysqli_num_rows($result_tabel) > 0) {
                                     $no = 1;
                                     while ($baris = mysqli_fetch_assoc($result_tabel)) {
                                         echo "<tr>";
                                         echo "<td>" . $no++ . "</td>";
-                                        echo "<td class='fw-bold'>" . htmlspecialchars($baris['no_rm']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($baris['dpjp']) . "</td>";
+                                        echo "<td class='fw-bold'>" . htmlspecialchars($baris['nama_pasien']) . "<br><small class='text-muted'>RM: " . htmlspecialchars($baris['no_rm']) . "</small></td>";
+                                        echo "<td>" . htmlspecialchars($baris['jenis_kelamin']) . "</td>";
                                         echo "<td><span class='badge bg-info text-dark'>" . htmlspecialchars($baris['diagnosis_utama']) . "</span></td>";
                                         echo "<td>" . date('d/m/Y', strtotime($baris['tgl_pulang'])) . "</td>";
                                         echo "</tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='5' class='text-center text-muted py-4'>Belum ada data.</td></tr>";
+                                    echo "<tr><td colspan='5' class='text-center text-muted py-4'>Belum ada data resume medis yang disimpan.</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -164,26 +147,45 @@ if(file_exists('navbar.php')) include 'navbar.php';
 </div>
 
 <script>
+    // Menerima data array PHP dan mengubahnya menjadi format JavaScript (JSON)
     const labelData = <?php echo json_encode($label_penyakit); ?>;
     const jumlahData = <?php echo json_encode($data_jumlah); ?>;
 
     const ctx = document.getElementById('grafikPenyakit').getContext('2d');
     
+    // Konfigurasi Chart
     const myChart = new Chart(ctx, {
-        type: 'doughnut', 
+        type: 'doughnut', // Bisa diganti 'bar', 'pie', atau 'line'
         data: {
             labels: labelData,
             datasets: [{
                 label: 'Jumlah Kasus',
                 data: jumlahData,
-                backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
         }
     });
 </script>
