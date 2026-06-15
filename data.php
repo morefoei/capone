@@ -76,10 +76,7 @@ if(file_exists('navbar.php')) include 'navbar.php';
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-dark">📊 Dashboard Surveilans Klinis</h3>
-        <div>
-            <a href="export_excel.php" class="btn btn-success me-2">📊 Export ke Excel (Barcode)</a>
-            <button class="btn btn-outline-primary" onclick="window.print()">🖨️ Cetak Laporan</button>
-        </div>
+        <button class="btn btn-outline-primary" onclick="window.print()">🖨️ Cetak Laporan</button>
     </div>
 
     <div class="row mb-4">

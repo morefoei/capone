@@ -301,7 +301,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold shadow">💾 Simpan E-Resume & Buka Lembar Cetak</button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold shadow">💾 Simpan E-Resume & Buka Lembar Cetak</button>
+                    <button type="submit" formaction="export_pulang_excel.php" class="btn btn-success w-100 btn-lg fw-bold shadow">📊 Export ke Excel (Barcode TTD)</button>
+                </div>
             </form>
         </div>
     </div>
