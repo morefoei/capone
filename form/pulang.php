@@ -20,7 +20,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Daftar Pasien - Ringkasan Pulang</h4>
-            <a href="javascript:history.back()" class="btn btn-warning">Kembali</a>
+            <div class="d-flex justify-content-start w-100 mb-3">
+                <a href="javascript:history.back()" class="btn btn-warning">
+                    Kembali
+                </a>
+            </div>
             <a href="?action=buat" class="btn btn-success fw-bold">+ Buat Baru Manual</a>
         </div>
         <div class="card-body">
