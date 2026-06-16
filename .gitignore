@@ -48,5 +48,5 @@ Thumbs.db
 # 6. Dependency / Package Manager (Opsional untuk masa depan)
 # ------------------------------------------
 # Jika nanti Anda memakai Composer (PHP) atau NPM (Node.js)
-vendor/
+#vendor/
 node_modules/
