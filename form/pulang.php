@@ -1,4 +1,7 @@
 <?php
+// 1. Panggil koneksi database di paling atas
+require_once '../input/koneksi.php'; 
+
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 ?>
 <!DOCTYPE html>
@@ -8,11 +11,25 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ringkasan Pulang (E-Resume) - Capstone RMIK</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Sedikit penyesuaian agar Select2 tingginya sama dengan input Bootstrap */
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+            border: 1px solid #dee2e6 !important;
+            border-radius: 0.375rem !important;
+            padding: 4px 0px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px !important;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
-<?php include 'navbar.php'; ?>
+<?php if (file_exists('navbar.php')) include 'navbar.php'; ?>
 
 <div class="container mt-5 mb-5">
 
@@ -20,15 +37,18 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Daftar Pasien - Ringkasan Pulang</h4>
-        <div class="d-flex justify-content-start mb-3">
-            <a href="index.php" class="btn btn-warning fw-bold">Kembali ke Halaman Utama</a>
-        </div>
-            <a href="?action=buat" class="btn btn-success fw-bold">+ Buat Baru Manual</a>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
+            <div class="d-flex justify-content-start mb-3">
+                <a href="index.php" class="btn btn-warning fw-bold">⬅️ Kembali ke Halaman Utama</a>
+            </div>
+            
+            <div class="row mb-3 d-flex justify-content-between">
                 <div class="col-md-6">
                     <input type="text" id="searchInput" class="form-control" placeholder="Cari Nama Pasien atau No. RM...">
+                </div>
+                <div class="col-md-auto">
+                    <a href="?action=buat" class="btn btn-success fw-bold">➕ Buat Baru Manual</a>
                 </div>
             </div>
             
@@ -82,22 +102,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
         </div>
     </div>
 
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            let rows = document.querySelectorAll('#patientTable tbody tr');
-            
-            rows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                if(text.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
-
 <?php else: ?>
     <?php
     $get_rm = isset($_GET['no_rm']) ? htmlspecialchars($_GET['no_rm']) : '';
@@ -108,8 +112,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <div class="d-flex justify-content-start w-100 mb-3">
-                <a href="?action=list" class="btn btn-warning">
-                    Kembali ke Daftar
+                <a href="?action=list" class="btn btn-warning fw-bold">
+                    ⬅️ Kembali ke Daftar
                 </a>
             </div>     
             <h4 class="mb-0">Ringkasan Pulang (Discharge Summary / E-Resume)</h4>
@@ -168,7 +172,20 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">DPJP Utama <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="dpjp" placeholder="Nama Dokter Penanggung Jawab" required>
+                        <select class="form-select select2-dpjp" name="dpjp" required>
+                            <option value="" disabled selected>Pilih Dokter DPJP...</option>
+                            <?php
+                            // Mengambil data dokter dari database
+                            $query_dokter = mysqli_query($koneksi, "SELECT * FROM dokter ORDER BY nama_dokter ASC");
+                            if ($query_dokter && mysqli_num_rows($query_dokter) > 0) {
+                                while ($dok = mysqli_fetch_assoc($query_dokter)) {
+                                    echo "<option value='{$dok['nama_dokter']}'>{$dok['nama_dokter']} ({$dok['jenis_dokter']})</option>";
+                                }
+                            } else {
+                                echo "<option value='' disabled>Belum ada data dokter. Silakan input di menu DPJP.</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Rawat Bersama (Konsul Dokter Lain)</label>
@@ -314,7 +331,38 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 <?php endif; ?>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
+// --- Inisiasi Select2 untuk Dropdown DPJP ---
+$(document).ready(function() {
+    $('.select2-dpjp').select2({
+        placeholder: "Ketik nama dokter untuk mencari...",
+        allowClear: true,
+        width: '100%' // Menyesuaikan dengan grid Bootstrap
+    });
+});
+
+// --- Fitur Search Sederhana Untuk Tabel Pasien ---
+if (document.getElementById('searchInput')) {
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#patientTable tbody tr');
+        
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            if(text.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+}
+
+// --- Fungsi Menghitung Lama Dirawat ---
 function hitungLamaDirawat() {
     var tglMasukStr = document.getElementById('tglMasuk').value;
     var tglPulangStr = document.getElementById('tglPulang').value;
@@ -326,11 +374,11 @@ function hitungLamaDirawat() {
         // Menghitung selisih milidetik
         var selisihWaktu = tglPulang.getTime() - tglMasuk.getTime();
         
-        // Mengubah milidetik ke hari (1 hari = 24 jam * 60 menit * 60 detik * 1000 milidetik)
+        // Mengubah milidetik ke hari
         var selisihHari = Math.ceil(selisihWaktu / (1000 * 3600 * 24));
         
         if (selisihHari >= 0) {
-            // Sesuai rumus rekam medis, jika masuk dan keluar di hari yang sama dihitung 1 hari
+            // Jika masuk dan keluar di hari yang sama dihitung 1 hari
             if (selisihHari == 0) selisihHari = 1; 
             document.getElementById('lamaDirawat').value = selisihHari;
         } else {
@@ -340,6 +388,5 @@ function hitungLamaDirawat() {
 }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

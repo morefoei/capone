@@ -1,5 +1,11 @@
 <?php
-require_once 'koneksi.php'; 
+// Nyalakan error reporting sementara biar kalau ada salah ketik langsung kelihatan pesannya
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Panggil file koneksi (pastikan path-nya benar sesuai struktur foldermu)
+require_once '../input/koneksi.php'; 
 
 $pesan = "";
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
@@ -8,10 +14,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 // PROSES SIMPAN (TAMBAH BARU) ATAU UPDATE
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_dokter = isset($_POST['id_dokter']) ? mysqli_real_escape_string($conn, $_POST['id_dokter']) : '';
-    $nama_dokter = mysqli_real_escape_string($conn, $_POST['nama_dokter']);
-    $nomor_dokter = mysqli_real_escape_string($conn, $_POST['nomor_dokter']);
-    $jenis_dokter = mysqli_real_escape_string($conn, $_POST['jenis_dokter']);
+    // SEMUA $conn DIUBAH MENJADI $koneksi SESUAI FILE koneksi.php KAMU
+    $id_dokter = isset($_POST['id_dokter']) ? mysqli_real_escape_string($koneksi, $_POST['id_dokter']) : '';
+    $nama_dokter = mysqli_real_escape_string($koneksi, $_POST['nama_dokter']);
+    $nomor_dokter = mysqli_real_escape_string($koneksi, $_POST['nomor_dokter']);
+    $jenis_dokter = mysqli_real_escape_string($koneksi, $_POST['jenis_dokter']);
     
     // Default file name (kosong jika tidak ada upload)
     $new_file_name = "";
@@ -48,34 +55,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (empty($new_file_name)) {
                 $pesan = "<div class='alert alert-danger'>Tanda tangan wajib diupload untuk dokter baru!</div>";
             } else {
-                $cek_nomor = mysqli_query($conn, "SELECT nomor_dokter FROM dokter WHERE nomor_dokter = '$nomor_dokter'");
+                $cek_nomor = mysqli_query($koneksi, "SELECT nomor_dokter FROM dokter WHERE nomor_dokter = '$nomor_dokter'");
                 if (mysqli_num_rows($cek_nomor) > 0) {
                     $pesan = "<div class='alert alert-warning'>Nomor Dokter <b>$nomor_dokter</b> sudah terdaftar!</div>";
                 } else {
                     $query = "INSERT INTO dokter (nama_dokter, nomor_dokter, jenis_dokter, file_ttd) 
                               VALUES ('$nama_dokter', '$nomor_dokter', '$jenis_dokter', '$new_file_name')";
-                    if (mysqli_query($conn, $query)) {
+                    if (mysqli_query($koneksi, $query)) {
                         $pesan = "<div class='alert alert-success'>Data dokter berhasil ditambahkan!</div>";
                         $action = 'list'; // Kembali ke list
                     } else {
-                        $pesan = "<div class='alert alert-danger'>Gagal: " . mysqli_error($conn) . "</div>";
+                        $pesan = "<div class='alert alert-danger'>Gagal: " . mysqli_error($koneksi) . "</div>";
                     }
                 }
             }
         } else {
             // --- PROSES UPDATE (EDIT) ---
-            // Jika ada file baru yang diupload, update field file_ttd. Jika tidak, biarkan file lama.
             if (!empty($new_file_name)) {
                 $query = "UPDATE dokter SET nama_dokter='$nama_dokter', nomor_dokter='$nomor_dokter', jenis_dokter='$jenis_dokter', file_ttd='$new_file_name' WHERE id_dokter='$id_dokter'";
             } else {
                 $query = "UPDATE dokter SET nama_dokter='$nama_dokter', nomor_dokter='$nomor_dokter', jenis_dokter='$jenis_dokter' WHERE id_dokter='$id_dokter'";
             }
             
-            if (mysqli_query($conn, $query)) {
+            if (mysqli_query($koneksi, $query)) {
                 $pesan = "<div class='alert alert-success'>Data dokter berhasil diperbarui!</div>";
                 $action = 'list'; // Kembali ke list
             } else {
-                $pesan = "<div class='alert alert-danger'>Gagal update: " . mysqli_error($conn) . "</div>";
+                $pesan = "<div class='alert alert-danger'>Gagal update: " . mysqli_error($koneksi) . "</div>";
             }
         }
     }
@@ -104,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // ==========================================
     if ($action == 'list'): 
     ?>
-    <div class="d-flex justify-content-start mb-3">
+        <div class="d-flex justify-content-start mb-3">
             <a href="index.php" class="btn btn-warning fw-bold">Kembali ke Halaman Utama</a>
         </div>
         <div class="card shadow">
@@ -128,7 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <tbody>
                             <?php
                             $no = 1;
-                            $query_list = mysqli_query($conn, "SELECT * FROM dokter ORDER BY id_dokter DESC");
+                            // Update variabel $conn jadi $koneksi di sini juga
+                            $query_list = mysqli_query($koneksi, "SELECT * FROM dokter ORDER BY id_dokter DESC");
                             if(mysqli_num_rows($query_list) > 0) {
                                 while($row = mysqli_fetch_assoc($query_list)) {
                                     echo "<tr>";
@@ -163,7 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $data_edit = null;
         
         if (!empty($id_edit)) {
-            $query_edit = mysqli_query($conn, "SELECT * FROM dokter WHERE id_dokter = '$id_edit'");
+            // Update variabel $conn jadi $koneksi
+            $query_edit = mysqli_query($koneksi, "SELECT * FROM dokter WHERE id_dokter = '$id_edit'");
             $data_edit = mysqli_fetch_assoc($query_edit);
         }
     ?>
