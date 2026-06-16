@@ -25,7 +25,7 @@
             <h4 class="mb-0">Formulir Elektronik Resep Obat (E-Resep)</h4>
         </div>
         <div class="card-body">
-            <form id="formResep" action="simpan_resep.php" method="POST">
+            <form id="formResep" action="../input/simpan_resep.php" method="POST">
                 
                 <h5 class="border-bottom pb-2">1. Validitas Resep & Alergi (Aspek Safety)</h5>
                 <div class="row mb-3">

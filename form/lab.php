@@ -25,7 +25,7 @@
             <h4 class="mb-0">Formulir Pemeriksaan & Hasil Laboratorium</h4>
         </div>
         <div class="card-body">
-            <form id="formLab" action="simpan_lab.php" method="POST">
+            <form id="formLab" action="../input/simpan_lab.php" method="POST">
                 
                 <h5 class="border-bottom pb-2">A. Permintaan & Sampel</h5>
                 <div class="row mb-3">

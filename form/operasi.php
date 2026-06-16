@@ -22,7 +22,7 @@
             <h4 class="mb-0"><i class="fas fa-procedures me-2"></i>Laporan Operasi & Prosedur Bedah</h4>
         </div>
         <div class="card-body p-4">
-            <form id="formOperasi" action="simpan_operasi.php" method="POST">
+            <form id="formOperasi" action="../input/simpan_operasi.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-danger fw-bold"><i class="bi bi-clock-history me-2"></i>1. Administrasi Bedah</h5>
                 <div class="row mb-3">

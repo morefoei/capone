@@ -22,7 +22,7 @@
             <h4 class="mb-0">Formulir Pemeriksaan & Hasil Radiologi</h4>
         </div>
         <div class="card-body">
-            <form id="formRadiologi" action="simpan_radiologi.php" method="POST" enctype="multipart/form-data">
+            <form id="formRadiologi" action="../input/simpan_radiologi.php" method="POST" enctype="multipart/form-data">
                 
                 <h5 class="border-bottom pb-2">A. Data Permintaan</h5>
                 <div class="row mb-3">

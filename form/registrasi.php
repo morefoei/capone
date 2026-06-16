@@ -22,7 +22,7 @@
             <h4 class="mb-0">Formulir Registrasi Pasien (Admisi)</h4>
         </div>
         <div class="card-body">
-            <form id="formRegistrasi" action="simpan_registrasi.php" method="POST">
+            <form id="formRegistrasi" action="../input/simpan_registrasi.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-primary">A. Identitas Sosial (Demografi)</h5>
                 

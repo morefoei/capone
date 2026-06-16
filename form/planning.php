@@ -22,7 +22,7 @@
             <h4 class="mb-0">Rencana Pemulangan Pasien (Discharge Planning)</h4>
         </div>
         <div class="card-body">
-            <form id="formPlanning" action="simpan_planning.php" method="POST">
+            <form id="formPlanning" action="../input/simpan_planning.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-info">1. Identifikasi Awal Pemulangan</h5>
                 <div class="row mb-3">

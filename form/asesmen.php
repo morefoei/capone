@@ -22,7 +22,7 @@
             <h4 class="mb-0">Formulir Asesmen Awal Medis & Keperawatan (Rawat Inap/Jalan)</h4>
         </div>
         <div class="card-body">
-            <form id="formAsesmen" action="simpan_asesmen.php" method="POST">
+            <form id="formAsesmen" action="../input/simpan_ases.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-secondary">1. Registrasi Klinis</h5>
                 <div class="row mb-3">

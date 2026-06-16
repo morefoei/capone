@@ -19,7 +19,7 @@
             <h4 class="mb-0">Catatan Perkembangan Pasien Terintegrasi (CPPT)</h4>
         </div>
         <div class="card-body">
-            <form id="formCPPT" action="simpan_cppt.php" method="POST">
+            <form id="formCPPT" action="../input/simpan_cppt.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-info">Informasi Dasar</h5>
                 <div class="row mb-3">

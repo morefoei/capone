@@ -22,7 +22,7 @@
             <h4 class="mb-0">Catatan Tindakan Keperawatan / Medis Non-Bedah</h4>
         </div>
         <div class="card-body">
-            <form id="formTindakan" action="simpan_tindakan.php" method="POST">
+            <form id="formTindakan" action="../input/simpan_tindakan.php" method="POST">
                 
                 <h5 class="border-bottom pb-2">Informasi Tindakan</h5>
                 <div class="row mb-3">
