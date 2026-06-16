@@ -1,9 +1,9 @@
 <?php
-include 'koneksi.php';
+include __DIR__ . '/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $no_rm         = mysqli_real_escape_string($koneksi, $_POST['no_rm']);
+    $no_rm_lama    = mysqli_real_escape_string($koneksi, $_POST['no_rm_lama']);
     $nik           = mysqli_real_escape_string($koneksi, $_POST['nik']);
     $nama_pasien   = mysqli_real_escape_string($koneksi, $_POST['nama_pasien']);
     $tempat_lahir  = mysqli_real_escape_string($koneksi, $_POST['tempat_lahir']);
@@ -18,22 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cara_bayar    = mysqli_real_escape_string($koneksi, $_POST['cara_bayar']);
     $tujuan_poli   = mysqli_real_escape_string($koneksi, $_POST['tujuan_poli']);
 
-    $sql = "INSERT INTO registrasi_pasien 
-            (no_rm, nik, nama_pasien, tempat_lahir, tgl_lahir, jenis_kelamin, 
-             agama, gol_darah, no_hp, alamat, nama_pj, hubungan_pj, cara_bayar, tujuan_poli)
-            VALUES 
-            ('$no_rm','$nik','$nama_pasien','$tempat_lahir','$tgl_lahir','$jenis_kelamin',
-             '$agama','$gol_darah','$no_hp','$alamat','$nama_pj','$hubungan_pj','$cara_bayar','$tujuan_poli')";
+    $sql = "UPDATE registrasi_pasien SET
+                nik='$nik', nama_pasien='$nama_pasien', tempat_lahir='$tempat_lahir',
+                tgl_lahir='$tgl_lahir', jenis_kelamin='$jenis_kelamin', agama='$agama',
+                gol_darah='$gol_darah', no_hp='$no_hp', alamat='$alamat',
+                nama_pj='$nama_pj', hubungan_pj='$hubungan_pj',
+                cara_bayar='$cara_bayar', tujuan_poli='$tujuan_poli'
+            WHERE no_rm='$no_rm_lama'";
 
     if (mysqli_query($koneksi, $sql)) {
-        header("Location: daftar_pasien.php?status=berhasil");
+        header("Location: /form/registrasi?status=update");
         exit();
     } else {
-        echo "Gagal menyimpan: " . mysqli_error($koneksi);
+        echo "Gagal update: " . mysqli_error($koneksi);
     }
 
 } else {
-    header("Location: registrasi.php");
+    header("Location: /form/registrasi");
     exit();
 }
 ?>

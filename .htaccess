@@ -14,3 +14,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L,QSA]
+
+# Khusus folder input/ - tangani path relatif dari subfolder
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/input/%{REQUEST_URI}.php -f
+RewriteRule ^input/(.*)$ input/$1.php [L,QSA]
