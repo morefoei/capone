@@ -118,7 +118,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
             <span class="badge bg-white text-primary fw-bold">No. Form: RI 02/2020/1</span>
         </div>
         <div class="card-body">
-            <form id="formRingkasanPulang" action="simpan.php" method="POST">
+            <form id="formRingkasanPulang" action="export_pulang_excel.php" method="POST">
                 
                 <h5 class="border-bottom pb-2 text-primary">1. Identitas Pasien</h5>
                 <div class="row mb-3">

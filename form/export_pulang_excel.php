@@ -1,120 +1,73 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] != "POST") {
-    die("Akses tidak valid.");
-}
+// Wajib: Memanggil library PhpSpreadsheet
+require 'vendor/autoload.php';
 
-// Format nama file
-$filename = "Ringkasan_Pulang_" . preg_replace('/[^A-Za-z0-9\-]/', '_', $_POST['nama_pasien'] ?? 'Pasien') . "_" . date('Ymd_His') . ".xls";
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-// Header untuk memicu download file Excel
-header("Content-Type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=\"$filename\"");
-header("Pragma: no-cache");
-header("Expires: 0");
+// 1. Tangkap Data dari Form
+$no_rm = $_POST['no_rm'] ?? '';
+$nama_pasien = $_POST['nama_pasien'] ?? '';
+$dpjp = $_POST['dpjp'] ?? 'Tidak Ada DPJP';
+$diagnosis_utama = $_POST['diagnosis_utama'] ?? '';
 
-$dpjp = isset($_POST['dpjp']) ? htmlspecialchars($_POST['dpjp']) : 'Tidak Ada Data';
+// 2. Generate QR Code untuk Tanda Tangan DPJP
+// Teks yang akan disimpan di dalam Barcode/QR
+$qr_data = "Dokumen ini sah dan ditandatangani secara elektronik oleh DPJP: " . $dpjp;
 
-// Menghasilkan URL barcode menggunakan API gratis (TEC-IT)
-$barcode_data = urlencode(trim($_POST['dpjp'] != '' ? $_POST['dpjp'] : 'KOSONG'));
-$barcode_url = "https://barcode.tec-it.com/barcode.ashx?data=" . $barcode_data . "&code=Code128&dpi=96&dataseparator=";
+// Kita pakai API gratis untuk generate QR Code
+$qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($qr_data);
 
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Export Data Resume</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; max-width: 800px; font-family: sans-serif; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; vertical-align: top; }
-        th { background-color: #f2f2f2; width: 35%; }
-        .header-title { font-size: 18pt; font-weight: bold; text-align: center; margin-bottom: 20px; }
-        .ttd-box { text-align: center; height: 100px; vertical-align: middle; }
-    </style>
-</head>
-<body>
+// Download gambar QR sementara ke server
+$qr_image = file_get_contents($qr_url);
+$temp_img = tempnam(sys_get_temp_dir(), 'qr_') . '.png';
+file_put_contents($temp_img, $qr_image);
 
-<div class="header-title">RINGKASAN PULANG (DISCHARGE SUMMARY)</div>
+// 3. Buat File Excel Baru
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
 
-<table>
-    <tr>
-        <th colspan="2" style="text-align: center; background-color: #d9edf7;">I. IDENTITAS PASIEN</th>
-    </tr>
-    <tr>
-        <th>Nomor Rekam Medis</th>
-        <td><?= htmlspecialchars($_POST['no_rm'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Nama Pasien</th>
-        <td><?= htmlspecialchars($_POST['nama_pasien'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Tanggal Lahir</th>
-        <td><?= htmlspecialchars($_POST['tgl_lahir'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Jenis Kelamin</th>
-        <td><?= htmlspecialchars($_POST['jenis_kelamin'] ?? '') == 'L' ? 'Laki-laki (L)' : 'Perempuan (P)' ?></td>
-    </tr>
+// Desain Layout Excel Sederhana
+$sheet->setCellValue('A1', 'RESUME MEDIS PASIEN');
+$sheet->mergeCells('A1:D1');
+$sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
 
-    <tr>
-        <th colspan="2" style="text-align: center; background-color: #d9edf7;">II. DETAIL PELAYANAN</th>
-    </tr>
-    <tr>
-        <th>Tanggal Masuk</th>
-        <td><?= htmlspecialchars($_POST['tgl_masuk'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Tanggal Keluar</th>
-        <td><?= htmlspecialchars($_POST['tgl_pulang'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Ruang Rawat Terakhir</th>
-        <td><?= htmlspecialchars($_POST['ruang_rawat'] ?? '') ?></td>
-    </tr>
+$sheet->setCellValue('A3', 'Nomor RM');
+$sheet->setCellValue('B3', ': ' . $no_rm);
+$sheet->setCellValue('A4', 'Nama Pasien');
+$sheet->setCellValue('B4', ': ' . $nama_pasien);
+$sheet->setCellValue('A5', 'Diagnosa Utama');
+$sheet->setCellValue('B5', ': ' . $diagnosis_utama);
 
-    <tr>
-        <th colspan="2" style="text-align: center; background-color: #d9edf7;">III. KLINIS & DIAGNOSIS</th>
-    </tr>
-    <tr>
-        <th>Diagnosis Masuk</th>
-        <td><?= htmlspecialchars($_POST['diagnosa_masuk'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Diagnosis Utama (ICD-10)</th>
-        <td><?= htmlspecialchars($_POST['diagnosis_utama'] ?? '') ?> (Kode: <?= htmlspecialchars($_POST['kode_icd10'] ?? '') ?>)</td>
-    </tr>
-    <tr>
-        <th>Ringkasan Riwayat Penyakit</th>
-        <td><?= nl2br(htmlspecialchars($_POST['ringkasan_riwayat'] ?? '')) ?></td>
-    </tr>
-    <tr>
-        <th>Prosedur / Tindakan (ICD-9)</th>
-        <td><?= htmlspecialchars($_POST['tindakan'] ?? '') ?> (Kode: <?= htmlspecialchars($_POST['kode_icd9'] ?? '') ?>)</td>
-    </tr>
-    <tr>
-        <th>Kondisi Pulang</th>
-        <td><?= htmlspecialchars($_POST['kondisi_pulang'] ?? '') ?></td>
-    </tr>
-    <tr>
-        <th>Terapi Pulang</th>
-        <td><?= nl2br(htmlspecialchars($_POST['terapi_pulang'] ?? '')) ?></td>
-    </tr>
+// 4. Area Tanda Tangan & Insert Barcode
+$sheet->setCellValue('D8', 'Dokter Penanggung Jawab');
 
-    <tr>
-        <th colspan="2" style="text-align: center; background-color: #d9edf7;">IV. PENGESAHAN DPJP</th>
-    </tr>
-    <tr>
-        <th>Nama DPJP Utama</th>
-        <td><?= $dpjp ?></td>
-    </tr>
-    <tr>
-        <th>Tanda Tangan (Barcode)</th>
-        <td class="ttd-box">
-            <img src="<?= $barcode_url ?>" alt="Barcode <?= $dpjp ?>" height="60">
-        </td>
-    </tr>
-</table>
+// Memasukkan gambar QR Code ke dalam Excel
+$drawing = new Drawing();
+$drawing->setName('Tanda Tangan QR');
+$drawing->setDescription('QR Code validasi DPJP');
+$drawing->setPath($temp_img); // Ambil gambar yang di-download tadi
+$drawing->setCoordinates('D9'); // Letakkan di sel D9
+$drawing->setHeight(90); // Ukuran tinggi barcode
+$drawing->setWorksheet($sheet);
 
-</body>
-</html>
+// Nama DPJP di bawah barcode
+$sheet->setCellValue('D14', '( ' . $dpjp . ' )');
+
+// Rapikan Lebar Kolom
+$sheet->getColumnDimension('A')->setWidth(20);
+$sheet->getColumnDimension('B')->setWidth(30);
+$sheet->getColumnDimension('D')->setWidth(30);
+
+// 5. Output file sebagai Excel (.xlsx) dan paksa browser untuk download
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="E-Resume_' . str_replace(' ', '_', $nama_pasien) . '.xlsx"');
+header('Cache-Control: max-age=0');
+
+$writer = new Xlsx($spreadsheet);
+$writer->save('php://output');
+
+// Hapus file gambar temporary agar server tidak penuh
+unlink($temp_img);
+exit;
