@@ -224,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $successMessage = $edit_id > 0 ? 'Data Resume Medis berhasil diperbarui!' : 'Seluruh data Resume Medis berhasil disimpan!';
         echo "<script>
                 alert('$successMessage');
-                window.location.href = '/form/eresume';
+                window.location.href = '/index.php';
               </script>";
         exit;
     } else {
@@ -497,7 +497,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <hr>
             <div class="d-flex justify-content-between mt-4">
-                <a href="/form/eresume" class="btn btn-secondary px-4">Kembali</a>
+                <a href="/index.php" class="btn btn-secondary px-4">Kembali</a>
                 <button type="submit" class="btn btn-primary px-5 fw-bold"><?= $editData ? 'Update Data Resume Medis' : 'Simpan Data Resume Medis' ?></button>
             </div>
         </form>
