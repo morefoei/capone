@@ -12,36 +12,6 @@ include __DIR__ . '/registrasi_helpers.php';
 
 ensureRegistrasiSchema($koneksi);
 
-// ==========================================
-// PROSES HAPUS REGISTRASI
-// ==========================================
-$isAdmin = true;
-if (isset($_GET['action']) && $_GET['action'] === 'delete_reg' && isset($_GET['id']) && $isAdmin) {
-    $delId = (int)$_GET['id'];
-    
-    // Cari semua E-Resume yang menempel pada Registrasi ini
-    $resQuery = mysqli_query($koneksi, "SELECT id FROM tabel_resume_medis WHERE registrasi_id = $delId");
-    if ($resQuery) {
-        while($rowRes = mysqli_fetch_assoc($resQuery)) {
-            $resId = (int)$rowRes['id'];
-            // Hapus semua ICD terkait E-Resume tersebut
-            mysqli_query($koneksi, "DELETE FROM tabel_resume_icd WHERE resume_id = $resId");
-        }
-    }
-    
-    // Hapus E-Resume terkait
-    mysqli_query($koneksi, "DELETE FROM tabel_resume_medis WHERE registrasi_id = $delId");
-    
-    // Hapus Registrasi
-    if (mysqli_query($koneksi, "DELETE FROM tabel_registrasi WHERE id = $delId")) {
-        echo "<script>alert('Data registrasi berhasil dihapus secara permanen.'); window.location.href='/form/eresume';</script>";
-        exit;
-    } else {
-        $error = mysqli_error($koneksi);
-        echo "<script>alert('Gagal menghapus: $error'); window.location.href='/form/eresume';</script>";
-        exit;
-    }
-}
 
 if (isset($_GET['action']) && $_GET['action'] === 'delete_res' && isset($_GET['id']) && $isAdmin) {
     $delId = (int)$_GET['id'];
@@ -60,41 +30,24 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 $offset = ($page - 1) * $limit;
 
-$registrasiSql = "SELECT r.*, tr.id AS resume_id
-                  FROM tabel_registrasi r
-                  LEFT JOIN (
-                      SELECT registrasi_id, MAX(id) AS id
-                      FROM tabel_resume_medis
-                      WHERE registrasi_id IS NOT NULL
-                      GROUP BY registrasi_id
-                  ) tr ON tr.registrasi_id = r.id
-                  ORDER BY r.id DESC LIMIT $limit OFFSET $offset";
-$registrasiResult = mysqli_query($koneksi, $registrasiSql);
+
 // Syarat E-Resume dianggap sudah lengkap:
 $condLengkap = "(diagnosa_utama IS NOT NULL AND trim(diagnosa_utama) != '') AND (prosedur_operasi IS NOT NULL AND trim(prosedur_operasi) != '') AND (tgl_keluar IS NOT NULL AND trim(tgl_keluar) != '') AND (dpjp_utama_dokter_id IS NOT NULL AND dpjp_utama_dokter_id > 0) AND (kondisi_pulang IS NOT NULL AND trim(kondisi_pulang) != '')";
 
-// Ambil E-Resume Draft (Belum Lengkap)
-$sqlDraft = "SELECT * FROM tabel_resume_medis WHERE NOT ($condLengkap) ORDER BY id DESC LIMIT $limit OFFSET $offset";
-$resultDraft = mysqli_query($koneksi, $sqlDraft);
 
 // Ambil E-Resume Selesai (Sudah Lengkap)
 $sqlSelesai = "SELECT * FROM tabel_resume_medis WHERE $condLengkap ORDER BY id DESC LIMIT $limit OFFSET $offset";
 $resultSelesai = mysqli_query($koneksi, $sqlSelesai);
 
-// Hitung total untuk pagination
-$totalRegResult = mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM tabel_registrasi");
-$totalReg = mysqli_fetch_assoc($totalRegResult)['total'];
 
-$totalDraftResult = mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM tabel_resume_medis WHERE NOT ($condLengkap)");
-$totalDraft = mysqli_fetch_assoc($totalDraftResult)['total'];
 
 $totalSelesaiResult = mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM tabel_resume_medis WHERE $condLengkap");
 $totalSelesai = mysqli_fetch_assoc($totalSelesaiResult)['total'];
 
-$totalRows = max($totalReg, $totalDraft, $totalSelesai);
+$totalRows = $totalSelesai;
 $totalPages = ceil($totalRows / $limit);
 
-if (!$registrasiResult || !$resultDraft || !$resultSelesai) {
+if (!$resultSelesai) {
     die("Query error: " . mysqli_error($koneksi));
 }
 ?>
@@ -126,12 +79,7 @@ if (!$registrasiResult || !$resultDraft || !$resultSelesai) {
                 <a href="/" class="btn btn-outline-dark shadow-sm me-2">
                     Kembali ke Index
                 </a>
-                <a href="/form/registrasi" class="btn btn-outline-primary shadow-sm me-2">
-                    Registrasi
-                </a>
-                <a href="/form/dokter" class="btn btn-outline-secondary shadow-sm me-2">
-                    Master Dokter
-                </a>
+
                 <a href="/form/tambah_resume" class="btn btn-primary shadow-sm me-2">
                     Buat E-Resume
                 </a>
@@ -145,129 +93,7 @@ if (!$registrasiResult || !$resultDraft || !$resultSelesai) {
             </div>
         </div>
 
-        <div class="section-heading">List Registrasi</div>
-        <div class="table-responsive mb-4">
-            <table class="table table-hover table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>NRM</th>
-                        <th>Nama Pasien</th>
-                        <th>Tgl Lahir</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Tgl Masuk</th>
-                        <th>Penyakit</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (mysqli_num_rows($registrasiResult) > 0): ?>
-                        <?php while ($row = mysqli_fetch_assoc($registrasiResult)): ?>
-                            <?php
-                            $tglLahir = !empty($row['tanggal_lahir']) ? date('d-M-Y', strtotime($row['tanggal_lahir'])) : '-';
-                            $tglMasuk = !empty($row['tgl_masuk']) ? date('d-M-Y', strtotime($row['tgl_masuk'])) : '-';
-                            ?>
-                            <tr>
-                                <td><span class="badge bg-secondary"><?= htmlspecialchars($row['nomor_rm'] ?? '-') ?></span></td>
-                                <td><?= htmlspecialchars($row['nama_pasien'] ?? '-') ?></td>
-                                <td><?= $tglLahir ?></td>
-                                <td><?= htmlspecialchars($row['jenis_kelamin'] ?? '-') ?></td>
-                                <td><?= $tglMasuk ?></td>
-                                <td><?= htmlspecialchars($row['penyakit'] ?? '-') ?></td>
-                                <td>
-                                    <?php if (!empty($row['resume_id'])): ?>
-                                        <span class="badge bg-success">Sudah E-Resume</span>
-                                    <?php else: ?>
-                                        <span class="badge bg-warning text-dark">Belum E-Resume</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php if (!empty($row['resume_id'])): ?>
-                                        <a href="/form/detail_resume?id=<?= (int) $row['resume_id'] ?>" class="btn btn-sm btn-outline-primary mb-1">Lihat E-Resume</a>
-                                    <?php else: ?>
-                                        <a href="/form/tambah_resume?registrasi_id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-primary mb-1">Buat E-Resume</a>
-                                    <?php endif; ?>
-                                    
-                                    <a href="/form/registrasi?action=edit&id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-outline-warning mb-1">Edit</a>
 
-                                    <?php if ($isAdmin): ?>
-                                        <a href="/form/eresume?action=delete_reg&id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus Registrasi? Data E-Resume terkait juga akan ikut terhapus!');">Hapus</a>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="8" class="text-center text-muted py-3">Belum ada data registrasi.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="section-heading text-warning">List E-Resume (Draft / Belum Lengkap)</div>
-        <div class="table-responsive mb-4">
-            <table class="table table-hover table-bordered align-middle">
-                <thead class="table-warning">
-                    <tr>
-                        <th>NRM</th>
-                        <th>Nama Pasien</th>
-                        <th>Tgl Masuk</th>
-                        <th>Tgl Keluar</th>
-                        <th>Belum Lengkap</th>
-                        <th>Kondisi Pulang</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (mysqli_num_rows($resultDraft) > 0) {
-                        while($row = mysqli_fetch_assoc($resultDraft)) {
-                            $tglMasuk = !empty($row['tgl_masuk']) ? date('d-M-Y', strtotime($row['tgl_masuk'])) : '-'; 
-                            $tglKeluar = !empty($row['tgl_keluar']) ? date('d-M-Y', strtotime($row['tgl_keluar'])) : '-';
-                            
-                            $missing = [];
-                            if (empty($row['tgl_keluar'])) $missing[] = 'Tgl Keluar';
-                            if (empty($row['dpjp_utama_dokter_id']) || $row['dpjp_utama_dokter_id'] == 0) $missing[] = 'DPJP Utama';
-                            if (empty(trim($row['diagnosa_utama'] ?? ''))) $missing[] = 'Diagnosa Utama';
-                            if (empty(trim($row['prosedur_operasi'] ?? ''))) $missing[] = 'Prosedur/Operasi';
-                            if (empty(trim($row['kondisi_pulang'] ?? ''))) $missing[] = 'Kondisi Pulang';
-                            
-                            $missingText = implode(', ', $missing);
-                            ?>
-                            <tr>
-                                <td><span class="badge bg-secondary"><?= htmlspecialchars($row['nomor_rm'] ?? '-') ?></span></td>
-                                <td><?= htmlspecialchars($row['nama_pasien'] ?? '-') ?></td>
-                                <td><?= $tglMasuk ?></td>
-                                <td><?= $tglKeluar ?></td>
-                                <td>
-                                    <?php if (!empty($missing)): ?>
-                                        <span class="text-danger fst-italic"><small>Kurang: <?= $missingText ?></small></span>
-                                    <?php else: ?>
-                                        <span class="text-success"><small>Siap disimpan</small></span>
-                                    <?php endif; ?>
-                                </td>
-                                <td><?= htmlspecialchars($row['kondisi_pulang'] ?? '-') ?></td>
-                                <td>
-                                    <a href="/form/tambah_resume?id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-primary">Lengkapi Data</a>
-                                    <?php if ($isAdmin): ?>
-                                        <a href="/form/eresume?action=delete_res&id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Yakin hapus E-Resume ini?');">Hapus</a>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    } else {
-                        ?>
-                        <tr>
-                            <td colspan="7" class="text-center text-muted py-3">Tidak ada draft E-Resume yang belum lengkap.</td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
 
         <div class="section-heading text-success">List E-Resume (Sudah Lengkap)</div>
         <div class="table-responsive">

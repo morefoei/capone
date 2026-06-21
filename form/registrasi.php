@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mysqli_query($koneksi, $query)) {
             echo "<script>
                     alert('$msg');
-                    window.location.href = '/form/eresume';
+                    window.location.href = '/form/list_registrasi';
                   </script>";
             exit;
         }
@@ -116,9 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="mb-0"><?= $editData ? 'Edit Data Pasien' : 'Registrasi Pasien Baru' ?></h3>
                     <?php if ($editData): ?>
-                        <a href="/form/eresume" class="btn btn-sm btn-outline-secondary">Batal Edit</a>
+                        <a href="/form/list_registrasi" class="btn btn-sm btn-outline-secondary">Batal Edit</a>
                     <?php else: ?>
-                        <a href="/form/eresume" class="btn btn-sm btn-outline-secondary">Kembali</a>
+                        <a href="/form/list_registrasi" class="btn btn-sm btn-outline-secondary">Kembali</a>
                     <?php endif; ?>
                 </div>
 

@@ -12,6 +12,8 @@
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/form/eresume">E-Resume</a></li>
                 <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/dashboard">Dashboard Laporan</a></li>
+                <li class="nav-item"><a class="nav-link text-info fw-bold" href="/form/list_registrasi">Registrasi</a></li>
+                <li class="nav-item"><a class="nav-link text-info fw-bold" href="/form/dokter">Master Dokter</a></li>
             </ul>
         </div>
     </div>
