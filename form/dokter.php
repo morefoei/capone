@@ -115,11 +115,14 @@ $dokterList = getDokterList($koneksi);
 
 <div class="container mt-5 mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="mb-1">Master Dokter</h3>
-            <p class="text-muted mb-0">Daftar dokter untuk DPJP dan tanda tangan barcode.</p>
+        <div class="d-flex align-items-center">
+            <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-3">
+            <div>
+                <h3 class="mb-1">Master Dokter</h3>
+                <p class="text-muted mb-0">Daftar dokter untuk DPJP dan tanda tangan barcode.</p>
+            </div>
         </div>
-        <a href="/form/eresume" class="btn btn-secondary">Kembali</a>
+        <a href="/" class="btn btn-outline-dark shadow-sm me-2">Kembali ke Index</a>
     </div>
 
     <?php if ($message !== ''): ?>

@@ -70,9 +70,12 @@ if (!$resultSelesai) {
 <div class="container mt-5">
     <div class="table-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h3 class="mb-1">Data E-Resume Medis</h3>
-                <p class="text-muted mb-0">Daftar rekam medis pasien sesuai formulir.</p>
+            <div class="d-flex align-items-center">
+                <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-3">
+                <div>
+                    <h3 class="mb-1">Data E-Resume Medis</h3>
+                    <p class="text-muted mb-0">Daftar rekam medis pasien sesuai formulir.</p>
+                </div>
             </div>
             
             <div>

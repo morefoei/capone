@@ -81,11 +81,17 @@ if (!$registrasiResult) {
 <div class="container mt-5">
     <div class="table-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h3 class="mb-1">Data Registrasi Pasien</h3>
-                <p class="text-muted mb-0">Daftar semua pasien yang telah diregistrasi.</p>
+            <div class="d-flex align-items-center">
+                <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-3">
+                <div>
+                    <h3 class="mb-1">Data Registrasi Pasien</h3>
+                    <p class="text-muted mb-0">Daftar semua pasien yang telah diregistrasi.</p>
+                </div>
             </div>
             <div>
+                <a href="/" class="btn btn-outline-dark shadow-sm me-2">
+                    Kembali ke Index
+                </a>
                 <a href="/form/registrasi" class="btn btn-primary shadow-sm me-2">
                     Buat Registrasi Baru
                 </a>

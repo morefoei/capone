@@ -255,7 +255,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container mt-5 mb-5">
     <div class="form-container">
-        <h2 class="text-center mb-4"><?= $editData ? 'Edit E-Resume Medis' : 'Formulir E-Resume Medis' ?></h2>
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="50" class="me-3">
+            <h2 class="mb-0"><?= $editData ? 'Edit E-Resume Medis' : 'Formulir E-Resume Medis' ?></h2>
+        </div>
         <form action="" method="POST">
             <input type="hidden" name="id" value="<?= (int) ($editData['id'] ?? 0) ?>">
             

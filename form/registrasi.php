@@ -114,7 +114,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-md-8">
             <div class="form-container">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="mb-0"><?= $editData ? 'Edit Data Pasien' : 'Registrasi Pasien Baru' ?></h3>
+                    <div class="d-flex align-items-center">
+                        <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-3">
+                        <h3 class="mb-0"><?= $editData ? 'Edit Data Pasien' : 'Registrasi Pasien Baru' ?></h3>
+                    </div>
                     <?php if ($editData): ?>
                         <a href="/form/list_registrasi" class="btn btn-sm btn-outline-secondary">Batal Edit</a>
                     <?php else: ?>
