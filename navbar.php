@@ -1,33 +1,32 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">E-Resume</a>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-2 bg-white rounded p-1">
+            E-Resume
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/form/eresume">E-Resume</a></li>
+                <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/dashboard">Dashboard Laporan</a></li>
+                <?php if (($_SESSION['role'] ?? 'admin') === 'admin'): ?>
+                <li class="nav-item"><a class="nav-link text-info fw-bold" href="/users">Kelola User</a></li>
+                <?php endif; ?>
                 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        E-Form
+                <li class="nav-item dropdown ms-lg-3 mt-3 mt-lg-0">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center bg-primary rounded-pill px-3 py-2 shadow-sm" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="bg-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 14px;">👤</span>
+                        <span class="fw-bold" style="font-size: 0.95rem;"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Akun Saya') ?></span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/form/registrasi">Registrasi</a></li>
-                        <li><a class="dropdown-item" href="/form/asesmen">Asesmen Medis/Keperawatan</a></li>
-                        <li><a class="dropdown-item" href="/form/cppt">CPPT</a></li>
-                        <li><a class="dropdown-item" href="/form/lab">Laboratorium</a></li>
-                        <li><a class="dropdown-item" href="/form/radiologi">Radiologi</a></li>
-                        <li><a class="dropdown-item" href="/form/tindakan">Tindakan</a></li>
-                        <li><a class="dropdown-item" href="/form/operasi">Operasi</a></li>
-                        <li><a class="dropdown-item" href="/form/resep">E-Resep</a></li>
-                        <li><a class="dropdown-item" href="/form/planning">Discharge Planning</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="profileDropdown" style="border-radius: 12px; min-width: 200px;">
+                        <li><a class="dropdown-item py-2 fw-semibold" href="/profile">✏️ Edit Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item fw-bold text-primary" href="/form/pulang">Ringkasan Pulang</a></li>
+                        <li><a class="dropdown-item py-2 fw-semibold text-danger" href="/logout">🚪 Logout</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/dashboard">Dashboard Laporan</a></li>
-                <li class="nav-item"><a class="nav-link" href="/maps/maps">Peta Persebaran (Maps)</a></li>
             </ul>
         </div>
     </div>
