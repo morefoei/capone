@@ -20,13 +20,17 @@
             font-size: 0.9rem;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <?php include dirname(__DIR__) . '/navbar.php'; ?>
 
 <div class="container mt-5 mb-5">
-    <div class="panel">
+    <div class="d-flex justify-content-end mb-3 d-print-none">
+        <button onclick="exportPDF()" class="btn btn-danger">📄 Export PDF</button>
+    </div>
+    <div class="panel" id="exportContent">
         <h3 class="section-title">Mockup Antarmuka (Wireframe) E-Resume Medis</h3>
         <p class="text-muted mb-4">Mockup ini merepresentasikan struktur tata letak (layout) sistem yang sudah kita bangun, berfokus pada pengalaman pengguna yang responsif dan terintegrasi.</p>
 
@@ -87,5 +91,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function exportPDF() {
+    let element = document.getElementById('exportContent');
+    let opt = {
+        margin:       10,
+        filename:     'Dokumentasi_Mockup_EResume.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+</script>
 </body>
 </html>

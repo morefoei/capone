@@ -7,13 +7,17 @@
     <title>Dokumentasi - Matriks Pemetaan Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <?php include dirname(__DIR__) . '/navbar.php'; ?>
 
 <div class="container mt-5">
-    <div class="panel">
+    <div class="d-flex justify-content-end mb-3 d-print-none">
+        <button onclick="exportPDF()" class="btn btn-danger">📄 Export PDF</button>
+    </div>
+    <div class="panel" id="exportContent">
         <h3 class="section-title">Matriks Pemetaan Data (Data Mapping)</h3>
         <p class="text-muted mb-4">Matriks ini menunjukkan elemen data apa saja yang di-input pada modul Pendaftaran (e-Form Registrasi) dan secara otomatis mengalir (auto-populate) ke modul E-Resume Medis sehingga dokter/petugas tidak perlu mengetik ulang identitas dasar pasien.</p>
 
@@ -42,5 +46,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function exportPDF() {
+    let element = document.getElementById('exportContent');
+    let opt = {
+        margin:       10,
+        filename:     'Dokumentasi_Matriks_Mapping.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+</script>
 </body>
 </html>

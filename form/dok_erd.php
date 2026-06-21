@@ -11,13 +11,17 @@
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <?php include dirname(__DIR__) . '/navbar.php'; ?>
 
 <div class="container mt-5 mb-5">
-    <div class="panel">
+    <div class="d-flex justify-content-end mb-3 d-print-none">
+        <button onclick="exportPDF()" class="btn btn-danger">📄 Export PDF</button>
+    </div>
+    <div class="panel" id="exportContent">
         <h3 class="section-title">Entity Relationship Diagram (ERD)</h3>
         <p class="text-muted mb-4">Diagram berikut merepresentasikan relasi dan struktur tabel database (tabel_dokter, tabel_registrasi, tabel_resume_medis, dan tabel_resume_icd) pada Sistem E-Resume.</p>
 
@@ -91,5 +95,18 @@ erDiagram
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function exportPDF() {
+    let element = document.getElementById('exportContent');
+    let opt = {
+        margin:       10,
+        filename:     'Dokumentasi_ERD_Database.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+</script>
 </body>
 </html>
