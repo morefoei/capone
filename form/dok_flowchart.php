@@ -25,7 +25,7 @@
         <h3 class="section-title">Flowchart Integrasi Data (E-Form ke E-Resume)</h3>
         <p class="text-muted mb-4">Diagram alir berikut mendeskripsikan bagaimana data pasien bergerak dari awal pasien masuk hingga resume medis dicetak.</p>
 
-        <div class="text-center border p-4 bg-light rounded" style="overflow-x: auto;">
+        <div id="diagramOnly" class="text-center border p-4 bg-white rounded" style="overflow-x: auto;">
             <pre class="mermaid">
 graph TD
     A([Mulai: Pasien Datang]) --> B[Petugas Admisi]
@@ -55,11 +55,13 @@ graph TD
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function exportPNG() {
-    let element = document.getElementById('exportContent');
-    // Ensure the background is white before exporting
-    html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+    // Target hanya bagian div diagram saja
+    let element = document.getElementById('diagramOnly');
+    
+    // Pastikan latar belakang gambar putih
+    html2canvas(element, { scale: 3, backgroundColor: "#ffffff" }).then(canvas => {
         let link = document.createElement('a');
-        link.download = 'Dokumentasi_Flowchart.png';
+        link.download = 'Flowchart_Sistem_EResume.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     });

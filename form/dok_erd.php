@@ -25,7 +25,7 @@
         <h3 class="section-title">Entity Relationship Diagram (ERD)</h3>
         <p class="text-muted mb-4">Diagram berikut merepresentasikan relasi dan struktur tabel database (tabel_dokter, tabel_registrasi, tabel_resume_medis, dan tabel_resume_icd) pada Sistem E-Resume.</p>
 
-        <div class="text-center border p-4 bg-light rounded mb-5" style="overflow-x: auto;">
+        <div id="diagramOnly" class="text-center border p-4 bg-white rounded mb-5" style="overflow-x: auto;">
             <pre class="mermaid">
 erDiagram
     TABEL_REGISTRASI {
@@ -97,11 +97,13 @@ erDiagram
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function exportPNG() {
-    let element = document.getElementById('exportContent');
-    // Ensure the background is white before exporting
-    html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+    // Target hanya bagian div diagram saja
+    let element = document.getElementById('diagramOnly');
+    
+    // Pastikan latar belakang gambar putih
+    html2canvas(element, { scale: 3, backgroundColor: "#ffffff" }).then(canvas => {
         let link = document.createElement('a');
-        link.download = 'Dokumentasi_ERD_Database.png';
+        link.download = 'ERD_Database_Sistem.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     });
