@@ -242,12 +242,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        body { background-color: #f0f2f5; }
-        .form-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: auto; }
-        .section-title { border-bottom: 2px solid #0d6efd; padding-bottom: 5px; margin-bottom: 20px; margin-top: 30px; font-weight: bold; color: #0d6efd; }
-        .doctor-preview { border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; min-height: 128px; background: #f8f9fa; }
-        .doctor-preview img { width: 170px; height: 62px; object-fit: contain; display: block; margin-bottom: 10px; background: #fff; border: 1px solid #e9ecef; }
+        .doctor-preview { border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; min-height: 128px; background: #f8fafc; }
+        .doctor-preview img { width: 170px; height: 62px; object-fit: contain; display: block; margin-bottom: 10px; background: #fff; border: 1px solid var(--border-color); }
         .doctor-preview .barcode { width: 100px !important; height: 100px !important; margin: 0 auto 10px; display: block; background: #fff; border: none; }
     </style>
 </head>

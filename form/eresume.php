@@ -59,11 +59,7 @@ if (!$resultSelesai) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem E-Resume Medis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; }
-        .table-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .section-heading { font-size: 1.1rem; font-weight: 700; margin: 24px 0 12px; }
-    </style>
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 

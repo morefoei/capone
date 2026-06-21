@@ -105,9 +105,8 @@ $dokterList = getDokterList($koneksi);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Dokter</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        body { background-color: #f8f9fa; }
-        .panel { background: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 24px; }
         .signature-preview { max-width: 120px; max-height: 56px; object-fit: contain; }
     </style>
 </head>

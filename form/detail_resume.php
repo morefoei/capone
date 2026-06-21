@@ -24,11 +24,11 @@ $data = mysqli_fetch_assoc($result);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail E-Resume Medis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        body { background-color: #f8f9fa; }
-        .detail-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
-        .section-title { font-weight: bold; border-bottom: 2px solid #0d6efd; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; color: #0d6efd; }
-        th { width: 30%; background-color: #f8f9fa !important; }
+        .detail-container { background: white; padding: 30px; border-radius: var(--radius-md); box-shadow: var(--shadow-md); max-width: 900px; margin: auto; }
+        .section-title { font-weight: bold; border-bottom: 2px solid var(--primary); padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; color: var(--primary); }
+        th { width: 30%; background-color: rgba(248, 250, 252, 0.5) !important; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
     </style>
 </head>
 <body>
@@ -36,7 +36,10 @@ $data = mysqli_fetch_assoc($result);
 <div class="container mt-5 mb-5">
     <div class="detail-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="mb-0">Detail Resume Medis</h3>
+            <div class="d-flex align-items-center">
+                <img src="/assets/img/logo-ueu-unggul.png" alt="Logo Esa Unggul" height="40" class="me-3">
+                <h3 class="mb-0">Detail Resume Medis</h3>
+            </div>
             <div>
                 <a href="/form/eresume" class="btn btn-secondary me-2">Kembali</a>
                 <a href="/form/cetak_resume?id=<?= $data['id'] ?>" target="_blank" class="btn btn-danger">

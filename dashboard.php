@@ -40,14 +40,11 @@ if ($result && mysqli_num_rows($result) > 0) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- HTML2PDF untuk Export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        body { background-color: #f4f6f9; }
         .dashboard-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
-        .card { border: none; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .card-header { background-color: #fff; border-bottom: 1px solid #edf2f9; padding: 20px 25px; border-radius: 12px 12px 0 0 !important; }
         .card-title { color: #2c3e50; font-weight: 700; margin: 0; }
-        .table th { background-color: #f8f9fa; color: #495057; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
-        .table td { vertical-align: middle; }
         .badge-rank { font-size: 0.9rem; padding: 8px 12px; border-radius: 8px; font-weight: 600; }
         .rank-1 { background-color: #ffd700; color: #856404; }
         .rank-2 { background-color: #e0e0e0; color: #383d41; }
