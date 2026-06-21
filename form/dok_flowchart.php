@@ -11,7 +11,7 @@
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-end mb-3 d-print-none">
-        <button onclick="exportPDF()" class="btn btn-danger">📄 Export PDF</button>
+        <button onclick="exportPNG()" class="btn btn-success">🖼️ Export Gambar (PNG)</button>
     </div>
     <div class="panel" id="exportContent">
         <h3 class="section-title">Flowchart Integrasi Data (E-Form ke E-Resume)</h3>
@@ -54,16 +54,15 @@ graph TD
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function exportPDF() {
+function exportPNG() {
     let element = document.getElementById('exportContent');
-    let opt = {
-        margin:       10,
-        filename:     'Dokumentasi_Flowchart_Integrasi.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+    // Ensure the background is white before exporting
+    html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = 'Dokumentasi_Flowchart.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
 }
 </script>
 </body>

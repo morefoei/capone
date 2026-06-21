@@ -18,7 +18,9 @@
             white-space: pre;
             line-height: 1.5;
             font-size: 0.9rem;
+            page-break-inside: avoid;
         }
+        ul, h5 { page-break-inside: avoid; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -99,7 +101,8 @@ function exportPDF() {
         filename:     'Dokumentasi_Mockup_EResume.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save();
 }
