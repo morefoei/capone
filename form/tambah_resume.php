@@ -760,33 +760,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $('#modalIcdSelect').select2({
             theme: 'bootstrap-5',
             dropdownParent: $('#modalSearchIcd'),
-            placeholder: 'Ketik minimal 3 huruf...',
-            minimumInputLength: 3,
+            placeholder: 'Cari atau ketik nama/kode penyakit...',
+            minimumInputLength: 0,
             ajax: {
                 url: function() {
                     return currentSearchType === 'prosedur' 
-                        ? 'https://clinicaltables.nlm.nih.gov/api/icd10pcs/v3/search' 
-                        : 'https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search';
+                        ? '../backend/ajax_icd.php?type=9' 
+                        : '../backend/ajax_icd.php?type=10';
                 },
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
-                        terms: params.term,
-                        sf: 'code,name',
-                        df: 'code,name'
+                        q: params.term
                     };
                 },
                 processResults: function (data) {
                     return {
-                        results: data[3].map(function(item) {
-                            return {
-                                id: item[0],
-                                text: item[0] + ' - ' + item[1],
-                                code: item[0],
-                                name: item[1]
-                            };
-                        })
+                        results: data
                     };
                 },
                 cache: true
