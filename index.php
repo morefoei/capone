@@ -15,17 +15,17 @@
 <div class="container mt-5">
     <div class="hero-section text-center text-md-start d-flex flex-column flex-md-row align-items-center justify-content-between gap-5">
         <div class="flex-grow-1">
-            <h1 class="fw-bold mb-3" style="color: var(--text-main); font-size: 2.5rem; letter-spacing: -1px;">
+            <h1 class="fw-bold mb-3" style="color: #000000; font-size: 2.75rem; letter-spacing: -1px;">
                 Sistem E-Resume Medis
             </h1>
-            <p class="lead text-muted mb-4 fs-5" style="max-width: 600px;">
+            <p class="lead mb-4 fs-5" style="max-width: 600px; color: #333333; font-weight: 500;">
                 Sistem Informasi Rekam Medis Elektronik Terintegrasi - Capstone RMIK Universitas Esa Unggul. Kelola resume pasien dengan cepat, aman, dan efisien.
             </p>
             <div class="d-flex flex-wrap gap-3 mt-4 justify-content-center justify-content-md-start">
-                <a class="btn btn-primary btn-lg shadow-sm" href="/form/tambah_resume" role="button">
+                <a class="btn btn-primary btn-lg shadow" href="/form/tambah_resume" role="button" style="background-color: #0055FF; border-color: #0055FF; font-weight: 700;">
                     Mulai Isi Form
                 </a>
-                <a class="btn btn-light btn-lg border shadow-sm" href="/dashboard" role="button" style="color: var(--text-main);">
+                <a class="btn btn-light btn-lg border shadow-sm" href="/dashboard" role="button" style="color: #000000; font-weight: 700; background-color: #FFFFFF;">
                     Lihat Dashboard
                 </a>
             </div>
