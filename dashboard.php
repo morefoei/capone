@@ -40,7 +40,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- HTML2PDF untuk Export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
     <style>
         .dashboard-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
         .card-title { color: var(--text-main); font-weight: 700; margin: 0; font-size: 1.15rem; letter-spacing: -0.3px; }
