@@ -5,10 +5,7 @@ deploy_ke_infinityfree:
   stage: deploy
   image: alpine:latest
   script:
-    # --- TAMBAHKAN BARIS INI SEBAGAI SOLUSI SEMENTARA ---
-    - echo "nameserver 8.8.8.8" > /etc/resolv.conf
-    # ----------------------------------------------------
-    
+    # Menghapus override resolv.conf karena menyebabkan I/O error pada apk add
     - apk add --no-cache lftp
     
     # Tambahkan opsi --no-perms agar lftp tidak mencoba mengubah hak akses file
